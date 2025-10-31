@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Программирование для начинающих | Полный курс</title>
+  <link rel="stylesheet" href="institute.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    /* Стили для модальных окон */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 0;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #eaeaea;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #666;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+
+    .close-btn:hover {
+      background-color: #f5f5f5;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #333;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    }
+
+    .course-options {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .course-option {
+      flex: 1;
+      border: 2px solid #eaeaea;
+      border-radius: 8px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .course-option:hover {
+      border-color: #4a90e2;
+    }
+
+    .course-option.selected {
+      border-color: #4a90e2;
+      background-color: rgba(74, 144, 226, 0.05);
+    }
+
+    .course-option h4 {
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+    }
+
+    .course-option p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .price {
+      font-weight: 600;
+      color: #333;
+      margin-top: 8px;
+    }
+
+    .btn-modal {
+      width: 100%;
+      padding: 14px;
+      background-color: #4a90e2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-modal:hover {
+      background-color: #3a7bc8;
+    }
+
+    .modal-footer {
+      padding: 16px 24px 24px;
+      text-align: center;
+      border-top: 1px solid #eaeaea;
+    }
+
+    .modal-footer p {
+      margin: 0;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* Темная тема для модальных окон */
+    body.dark-theme .modal-content {
+      background-color: #2d3748;
+      color: #e2e8f0;
+    }
+
+    body.dark-theme .modal-header {
+      border-bottom-color: #4a5568;
+    }
+
+    body.dark-theme .modal-header h2 {
+      color: #e2e8f0;
+    }
+
+    body.dark-theme .close-btn {
+      color: #a0aec0;
+    }
+
+    body.dark-theme .close-btn:hover {
+      background-color: #4a5568;
+    }
+
+    body.dark-theme .form-group label {
+      color: #e2e8f0;
+    }
+
+    body.dark-theme .form-control {
+      background-color: #4a5568;
+      border-color: #4a5568;
+      color: #e2e8f0;
+    }
+
+    body.dark-theme .form-control:focus {
+      border-color: #63b3ed;
+      box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.1);
+    }
+
+    body.dark-theme .course-option {
+      border-color: #4a5568;
+      background-color: #4a5568;
+    }
+
+    body.dark-theme .course-option:hover {
+      border-color: #63b3ed;
+    }
+
+    body.dark-theme .course-option.selected {
+      border-color: #63b3ed;
+      background-color: rgba(99, 179, 237, 0.1);
+    }
+
+    body.dark-theme .course-option p {
+      color: #a0aec0;
+    }
+
+    body.dark-theme .price {
+      color: #e2e8f0;
+    }
+
+    body.dark-theme .modal-footer {
+      border-top-color: #4a5568;
+    }
+
+    body.dark-theme .modal-footer p {
+      color: #a0aec0;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-laptop-code"></i>
+          <div class="logo-text">
+            <h1>CodeMaster</h1>
+            <span>Учебник по программированию</span>
+          </div>
+        </div>
+        <nav class="nav">
+          <a href="#lessons" class="nav-link">Уроки</a>
+          <a href="#exercises" class="nav-link">Практика</a>
+          <a href="#resources" class="nav-link">Ресурсы</a>
+          <a href="#authors" class="nav-link">Авторы</a>
+        </nav>
+        <div class="header-actions">
+          <button class="btn-theme">
+            <i class="fas fa-moon"></i>
+          </button>
+          <button class="btn-search">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-text">
+            <div class="badge">Полный курс</div>
+            <h1>Программирование для начинающих</h1>
+            <p class="hero-description">
+              Освойте основы программирования с нуля. Практический курс с реальными проектами, 
+              интерактивными упражнениями и поддержкой сообщества.
+            </p>
+            <div class="hero-stats">
+              <div class="stat">
+                <span class="number">42</span>
+                <span class="label">урока</span>
+              </div>
+              <div class="stat">
+                <span class="number">156</span>
+                <span class="label">упражнений</span>
+              </div>
+              <div class="stat">
+                <span class="number">8</span>
+                <span class="label">проектов</span>
+              </div>
+            </div>
+            <div class="hero-buttons">
+              <button class="btn btn-primary" id="startLearningBtn">
+                <i class="fas fa-play"></i>
+                Начать обучение
+              </button>
+              <button class="btn btn-secondary" id="previewBtn">
+                <i class="fas fa-eye"></i>
+                Предпросмотр
+              </button>
+            </div>
+          </div>
+          <div class="hero-visual">
+            <div class="code-window">
+              <div class="window-header">
+                <div class="window-controls">
+                  <span class="control red"></span>
+                  <span class="control yellow"></span>
+                  <span class="control green"></span>
+                </div>
+                <span class="window-title">example.py</span>
+              </div>
+              <div class="code-content">
+                <pre><code>def welcome_student(name):
+    """Приветствие нового студента"""
+    print(f"Добро пожаловать, {name}!")
+    print("Начнем наше путешествие в мир программирования!")
+
+# Запуск программы
+welcome_student("Ерасыл")</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Модальное окно для регистрации на полный курс -->
+    <div id="fullCourseModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Регистрация на полный курс</h2>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="course-options">
+            <div class="course-option selected" data-course="full">
+              <h4>Полный курс</h4>
+              <p>Доступ ко всем урокам, упражнениям и проектам</p>
+              <div class="price">59 990 ₸</div>
+            </div>
+          </div>
+          
+          <form id="fullCourseForm">
+            <div class="form-group">
+              <label for="fullName">ФИО</label>
+              <input type="text" id="fullName" class="form-control" placeholder="Введите ваше полное имя" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="form-control" placeholder="Введите ваш email" required>
+            </div>
+            <div class="form-group">
+              <label for="phone">Телефон</label>
+              <input type="tel" id="phone" class="form-control" placeholder="Введите ваш телефон" required>
+            </div>
+            <button type="submit" class="btn-modal">Зарегистрироваться</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <p>Нажимая кнопку, вы соглашаетесь с условиями обработки персональных данных</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Модальное окно для пробного урока -->
+    <div id="trialLessonModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Запись на пробный урок</h2>
+          <button class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="course-options">
+            <div class="course-option selected" data-course="trial">
+              <h4>Пробный урок</h4>
+              <p>Бесплатное введение в программирование</p>
+              <div class="price">Бесплатно</div>
+            </div>
+          </div>
+          
+          <form id="trialLessonForm">
+            <div class="form-group">
+              <label for="trialName">ФИО</label>
+              <input type="text" id="trialName" class="form-control" placeholder="Введите ваше полное имя" required>
+            </div>
+            <div class="form-group">
+              <label for="trialEmail">Email</label>
+              <input type="email" id="trialEmail" class="form-control" placeholder="Введите ваш email" required>
+            </div>
+            <div class="form-group">
+              <label for="trialDate">Выберите дату</label>
+              <input type="date" id="trialDate" class="form-control" required>
+            </div>
+            <button type="submit" class="btn-modal">Записаться на пробный урок</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <p>Нажимая кнопку, вы соглашаетесь с условиями обработки персональных данных</p>
+        </div>
+      </div>
+    </div>
+
+    <section id="lessons" class="lessons">
+      <div class="container">
+        <div class="section-header">
+          <h2>Структура курса</h2>
+          <p>Пошаговое обучение от основ до продвинутых тем</p>
+        </div>
+        <div class="modules-grid">
+          <div class="module-card">
+            <div class="module-header">
+              <div class="module-number">01</div>
+              <div class="module-icon">
+                <i class="fas fa-play-circle"></i>
+              </div>
+            </div>
+            <h3>Основы программирования</h3>
+            <p>Переменные, типы данных, операторы и базовые конструкции</p>
+            <ul class="lesson-list">
+              <li><i class="fas fa-check"></i> Введение в программирование</li>
+              <li><i class="fas fa-check"></i> Переменные и типы данных</li>
+              <li><i class="fas fa-check"></i> Условные операторы</li>
+              <li><i class="fas fa-check"></i> Циклы и итерации</li>
+              <li><span class="lesson-count">+2 урока</span></li>
+            </ul>
+            <div class="module-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+              
+              <span class="progress-text">Начать модуль</span>
+            </div>
+          </div>
+
+          <div class="module-card">
+            <div class="module-header">
+              <div class="module-number">02</div>
+              <div class="module-icon">
+                <i class="fas fa-functions"></i>
+              </div>
+            </div>
+            <h3>Функции и модули</h3>
+            <p>Создание функций, работа с модулями и организация кода</p>
+            <ul class="lesson-list">
+              <li><i class="fas fa-clock"></i> Определение функций</li>
+              <li><i class="fas fa-clock"></i> Параметры и аргументы</li>
+              <li><i class="fas fa-clock"></i> Возврат значений</li>
+              <li><i class="fas fa-clock"></i> Работа с модулями</li>
+              <li><span class="lesson-count">+3 урока</span></li>
+            </ul>
+            <div class="module-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+              <span class="progress-text">Блокировано</span>
+            </div>
+          </div>
+
+          <div class="module-card">
+            <div class="module-header">
+              <div class="module-number">03</div>
+              <div class="module-icon">
+                <i class="fas fa-database"></i>
+              </div>
+            </div>
+            <h3>Структуры данных</h3>
+            <p>Массивы, списки, словари и другие структуры данных</p>
+            <ul class="lesson-list">
+              <li><i class="fas fa-clock"></i> Списки и массивы</li>
+              <li><i class="fas fa-clock"></i> Словари и хеш-таблицы</li>
+              <li><i class="fas fa-clock"></i> Множества</li>
+              <li><i class="fas fa-clock"></i> Строки и текстовые данные</li>
+              <li><span class="lesson-count">+4 урока</span></li>
+            </ul>
+            <div class="module-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+              </div>
+              <span class="progress-text">Блокировано</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="exercises" class="exercises">
+      <div class="container">
+        <div class="section-header">
+          <h2>Практические задания</h2>
+          <p>Закрепляйте знания на реальных примерах и проектах</p>
+        </div>
+        <div class="exercises-grid">
+          <div class="exercise-card">
+            <div class="exercise-difficulty easy">Начальный</div>
+            <h3>Калькулятор выражений</h3>
+            <p>Создайте программу для вычисления математических выражений</p>
+            <div class="exercise-tags">
+              <span class="tag">Функции</span>
+              <span class="tag">Математика</span>
+            </div>
+            <div class="exercise-meta">
+              <span><i class="fas fa-clock"></i> 30 минут</span>
+              <span><i class="fas fa-star"></i> 85% успеха</span>
+            </div>
+            <button class="btn btn-outline" onclick="window.open('https://timeweb.com/ru/community/articles/prostoy-kalkulyator-na-python', '_blank')">Начать задание</button>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-difficulty medium">Средний</div>
+            <h3>Анализатор <br>текста</h3>
+            <p>Программа для подсчета слов, символов и статистики текста</p>
+            <div class="exercise-tags">
+              <span class="tag">Строки</span>
+              <span class="tag">Файлы</span>
+            </div>
+            <div class="exercise-meta">
+              <span><i class="fas fa-clock"></i> 45 минут</span>
+              <span><i class="fas fa-star"></i> 72% успеха</span>
+            </div> <br>
+            <button class="btn btn-outline"  onclick="window.open('https://gvard.github.io/py/text/', '_blank')" >Начать задание</button>
+          </div>
+
+          <div class="exercise-card">
+            <div class="exercise-difficulty hard">Продвинутый</div>
+            <h3>Мини-база <br>данных</h3>
+            <p>Реализуйте простую систему хранения и поиска данных</p>
+            <div class="exercise-tags">
+              <span class="tag">Структуры данных</span>
+              <span class="tag">Алгоритмы</span>
+            </div>
+            <div class="exercise-meta">
+              <span><i class="fas fa-clock"></i> 90 минут</span>
+              <span><i class="fas fa-star"></i> 58% успеха</span>
+            </div> <br>
+            <button class="btn btn-outline"  onclick="window.open('https://habr.com/ru/companies/otus/articles/844114/', '_blank')">Начать задание</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resources" class="resources">
+      <div class="container">
+        <div class="section-header">
+          <h2>Дополнительные ресурсы</h2>
+          <p>Все необходимое для успешного обучения</p>
+        </div>
+        <div class="resources-grid">
+          <div class="resource-card">
+            <div class="resource-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <h3>PDF-учебник</h3>
+            <p>Подборка книг-учебников по программированию <br> <br></p>
+            <button class="btn btn-ghost" onclick="window.open('https://flibusta.su/tag/1440-ucebniki-po-programmirovaniu/', '_blank')">
+              <i class="fas fa-download"></i>
+              Скачать
+            </button>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon">
+              <i class="fas fa-video"></i>
+            </div>
+            <h3>Видеоуроки</h3>
+            <p>Дополнительные видео материалы по сложным темам курса</p>
+            <button class="btn btn-ghost" onclick="window.open('https://www.youtube.com/watch?v=aO4Mnz485uM&list=PL0lO_mIqDDFVpA3OER_D2bMZfpfjN1pBz/', '_blank')">
+              <i class="fas fa-play"></i>
+              Смотреть
+            </button>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon">
+              <i class="fas fa-code"></i>
+            </div>
+            <h3>Исходный код</h3>
+            <p>Все примеры кода из уроков и готовые решения заданий</p>
+            <button class="btn btn-ghost" onclick="window.open('https://gb.ru/blog/chto-takoe-githab/', '_blank')">
+              <i class="fab fa-github"></i>
+              GitHub
+            </button>
+          </div>
+
+          <div class="resource-card">
+            <div class="resource-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>Сообщество</h3>
+            <p>Форум для обсуждения вопросов и помощи от преподавателей</p>
+            <button class="btn btn-ghost" onclick="window.open('https://www.cyberforum.ru/', '_blank')">
+              <i class="fas fa-comments"></i>
+              Присоединиться
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="authors" class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-main">
+          <div class="footer-logo">
+            <i class="fas fa-laptop-code"></i>
+            <span>CodeMaster</span>
+          </div>
+          <p>Современный учебник по программированию, созданный практикующими разработчиками</p>
+          <div class="social-links">
+            <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h4>Авторы курса</h4>
+          <div class="authors-list">
+            <div class="author">
+              <div class="author-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="author-info">
+                <strong>Амина Казыбековна</strong>
+                <span>Senior Developer</span>
+              </div>
+            </div>
+            <div class="author">
+              <div class="author-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="author-info">
+                <strong>Орынтай Аман</strong>
+                <span>Tech Lead</span>
+              </div>
+            </div>
+            <div class="author">
+              <div class="author-avatar">
+                <i class="fas fa-user"></i>
+              </div>
+              <div class="author-info">
+                <strong>Айбек Жаппаров</strong>
+                <span>Software Engineer</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-section">
+          <h4>Разделы</h4>
+          <ul class="footer-links">
+            <li><a href="#lessons">Уроки</a></li>
+            <li><a href="#exercises">Практика</a></li>
+            <li><a href="#resources">Ресурсы</a></li>
+            <li><a href="#authors">Авторы</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-section">
+          <h4>Контакты</h4>
+          <div class="contact-info">
+            <p><i class="fas fa-envelope"></i> contact@codemaster.kz</p>
+            <p><i class="fas fa-globe"></i> www.codemaster.kz</p>
+            <p><i class="fas fa-map-marker-alt"></i> Кызылорда, проспект Абая, 15</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2025 CodeMaster. Все права защищены.</p>
+        <div class="footer-links">
+          <a href="#">Политика конфиденциальности</a>
+          <a href="#">Условия использования</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Модальные окна
+    const startLearningBtn = document.getElementById('startLearningBtn');
+    const previewBtn = document.getElementById('previewBtn');
+    const fullCourseModal = document.getElementById('fullCourseModal');
+    const trialLessonModal = document.getElementById('trialLessonModal');
+    const closeButtons = document.querySelectorAll('.close-btn');
+    const fullCourseForm = document.getElementById('fullCourseForm');
+    const trialLessonForm = document.getElementById('trialLessonForm');
+
+    // Открытие модальных окон
+    startLearningBtn.addEventListener('click', () => {
+      fullCourseModal.style.display = 'block';
+    });
+
+    previewBtn.addEventListener('click', () => {
+      trialLessonModal.style.display = 'block';
+    });
+
+    // Закрытие модальных окон
+    closeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        fullCourseModal.style.display = 'none';
+        trialLessonModal.style.display = 'none';
+      });
+    });
+
+    // Закрытие при клике вне модального окна
+    window.addEventListener('click', (event) => {
+      if (event.target === fullCourseModal) {
+        fullCourseModal.style.display = 'none';
+      }
+      if (event.target === trialLessonModal) {
+        trialLessonModal.style.display = 'none';
+      }
+    });
+
+    // Обработка форм
+    fullCourseForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Здесь должна быть логика отправки данных
+      alert('Спасибо за регистрацию на полный курс! Мы свяжемся с вами в ближайшее время.');
+      fullCourseModal.style.display = 'none';
+      fullCourseForm.reset();
+    });
+
+    trialLessonForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Здесь должна быть логика отправки данных
+      alert('Спасибо за запись на пробный урок! Мы свяжемся с вами для подтверждения даты.');
+      trialLessonModal.style.display = 'none';
+      trialLessonForm.reset();
+    });
+
+    // Существующая логика для интерактивности
+    document.addEventListener('DOMContentLoaded', function() {
+      // Анимация прогресса при наведении на первый модуль
+      const firstModule = document.querySelector('.module-card');
+      const progressFill = firstModule.querySelector('.progress-fill');
+      const progressText = firstModule.querySelector('.progress-text');
+      
+      firstModule.addEventListener('mouseenter', function() {
+        progressFill.style.width = '100%';
+        progressText.textContent = 'Начать →';
+      });
+      
+      firstModule.addEventListener('mouseleave', function() {
+        progressFill.style.width = '0%';
+        progressText.textContent = 'Начать модуль';
+      });
+      
+      // Переключение темы
+      const themeBtn = document.querySelector('.btn-theme');
+      themeBtn.addEventListener('click', function() {
+        document.body.classList.toggle('dark-theme');
+        const icon = themeBtn.querySelector('i');
+        if (document.body.classList.contains('dark-theme')) {
+          icon.className = 'fas fa-sun';
+        } else {
+          icon.className = 'fas fa-moon';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
